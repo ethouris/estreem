@@ -1,0 +1,18 @@
+1. Problem in identifying the lexeme, if it has extenders
+
+When extenders are added to candidates, then:
+ - selecting the most unique lexeme causes that char:&32 is preferred over expected @whitespace
+ - selecting the most general lexeme causes that @any is preferred over expected @whitespace
+
+Possible solutions:
+
+ - The 'expected' array must be filled in
+ - The most general is preferred, unless it's @any
+ - Multiple return is allowed and:
+   - the identified lexeme is the longest and most unique
+   - returned are all lexemes one after another in order:
+     - first the most unique lexeme
+	 - followed by its direct extenders (siblins in whatever order)
+	 - followed by next level extenders until the most general extender
+
+

@@ -1,0 +1,25 @@
+
+Function's API:
+
+bool Scanner::accept(char c, vector<Lexeme*> expected, vector<ParseResult> results);
+
+
+Structures:
+
+struct Indexor; // deeply indexable
+
+struct Candidate
+{
+	Lexeme* lex;
+	Indexor current;
+	bool full; // enough chars to make it matched
+	bool complete; // next character will not belong to it
+	bool prefix; // This is now prefix, is not incremented in current session
+	vector<Candidate> sub_candidates;
+}
+
+a. Select only direct followers.
+b. If there is expected list, search each direct candidate through its followers and extenders, if they match the expected lexeme.
+c. The fist list of candidates is the common part of direct candidates (with their all potential followers and extenders) and expected lexemes.
+(Note that extraction of the candidates for a combination of entry character and entity state can use pre-generated candidate lists).
+
