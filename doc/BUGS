@@ -15,4 +15,5 @@ Possible solutions:
 	 - followed by its direct extenders (siblins in whatever order)
 	 - followed by next level extenders until the most general extender
 
-
+2. BUG:
+	- the put aside characters incorrectly add new candidates towards the next candidates for characters read from stream. REQUIRED: better separation of interpretation and receiving characters
