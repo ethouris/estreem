@@ -151,6 +151,7 @@ const bool empty_whitespace = true;
 class LexemeBase;			// root lexeme class
 class DirectLexeme;			// lexeme assigned 1to1 to a character
 class CharLexeme;			// an alternative or range of characters, possibly with flags
+class RichLexeme;           // an arbitrary lexeme with flags
 class AlternativeLexeme;	// an alternative of arbitrary lexemes
 class SequenceLexeme;		// a lexeme that contains a sequence of arbitrary lexemes
 class Lexeme;				// value wrapper class
