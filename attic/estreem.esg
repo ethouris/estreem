@@ -77,9 +77,7 @@ lexeme istring {
 
 state <DECL_SPACE> = <TOP>|<IN_ENTITY>|<IN_LEXEME>
 
-entity nttlexeme {
-	entry <DECL_SPACE>
-
+entity nttlexeme <DECL_SPACE> {
 	<DECL_SPACE> sequence kw:lexeme identifier:undefined <LEXEME_DEFINED>
 	<LEXEME_DEFINED> sequence brace_open <IN_LEXEME>
 	<LEXEME_DEFINED> sequence assign expression [leave]

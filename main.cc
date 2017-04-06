@@ -899,6 +899,7 @@ public:
 			Match submatch = alternatives_[current0]->match(ch, current, full);
 			current.push_front(current0);
 
+            // XXX Actually, it's just 'return submatch' :)
 			switch ( submatch )
 			{
 			case Match::full:
@@ -1032,7 +1033,8 @@ public:
 				// It may happen also that it get until the end and return full.
 			}
 
-			current.push_front(current0);
+            // done already, if exited the above loop
+			//current.push_front(current0);
 
 			if ( submatch == Match::failed )
 				return Match::failed;
