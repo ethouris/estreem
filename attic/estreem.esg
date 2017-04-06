@@ -1,0 +1,93 @@
+
+# The trial description of estreem grammar file written in estreem grammar syntax.
+
+# Whitespaces are nonempty. Some grammar relies on string gluing.
+
+
+lexeme @whitespace {
+	string { " " | "\t" }
+}
+
+lexeme cipher = '09'
+lexeme uc_letter = 'AZ'
+lexeme lc_letter = 'az'
+lexeme letter = uc_letter|lc_letter
+lexeme nameable = letter|"_"
+lexeme nameable_s = nameable|cipher
+lexeme langword {
+	string nameable nameable_s...?
+}
+
+keywords kw = langword
+
+lexeme identifier {
+	sequence langword
+	case defined { [poll defined] }
+
+	case undefined = ^defined
+}
+
+# Operators
+lexeme includes = "|"
+lexeme excludes = "^"
+lexeme optional = "?"
+lexeme dot = "."            # used in state spec
+lexeme variadic {
+	string dot dot dot
+}
+
+lexeme assign = "="
+lexeme brace_open = "{"
+lexeme brace_close = "}"
+lexeme angle_left = "<"
+lexeme angle_right = ">"
+
+lexeme unit_expression {
+	string identifier(id) variadic(var)? optional(opt)?
+}
+
+lexeme train_expression {
+	| string excludes(not) unit_expression(inexp)
+	| string includes unit_expression(inexp)
+}
+
+
+lexeme compound_expression {
+	sequence brace_open(brace) train_expression... brace_close
+}
+
+lexeme expression = train_expression|compound_expression
+
+lexeme state_detail {
+	string dot langword(with_detail) |
+	string dot excludes langword(without_detail)
+}
+
+lexeme state_expr {
+	string {langword(prevstate) "/"}? langword(state) state_detail(detail)?
+}
+
+lexeme state {
+	string angle_left state_expr angle_right
+}
+
+lexeme istring {
+	sequence kw:string compound_expression(string_items)...
+}
+
+state <DECL_SPACE> = <TOP>|<IN_ENTITY>|<IN_LEXEME>
+
+entity nttlexeme {
+	entry <DECL_SPACE>
+
+	<DECL_SPACE> sequence kw:lexeme identifier:undefined <LEXEME_DEFINED>
+	<LEXEME_DEFINED> sequence brace_open <IN_LEXEME>
+	<LEXEME_DEFINED> sequence assign expression [leave]
+}
+
+
+
+entity nttentity {
+}
+
+

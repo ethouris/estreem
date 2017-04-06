@@ -1,0 +1,218 @@
+General statement:
+
+A usual state parser: the entry state, the event (a composition of tokens), the exit state.
+
+The event may have parameters.
+
+There's no unanimous state - there are state particles.
+
+An event may cause several state particles to turn into a different state.
+
+Some state particles can be also multilayer (stack).
+
+
+
+==============================
+Example C++ code
+==============================
+
+namespace std {
+	template<class> class char_traits;
+	template<class> class allocator;
+
+	template<typename C,typename T = char_traits<C>,typename A=allocator<C> >
+		class basic_string;
+	typedef basic_string<char> string;
+}
+
+
+int me( std::string& );
+
+#include <string>
+
+int main( int argc, char** argv )
+{
+	using namespace std;
+	
+	string s;
+	me( s );
+	return 0;
+}
+
+int me( std::string& s ) { s = ""; }
+
+
+==============================
+Character stream is known form. Token stream looks like this:
+==============================
+
+namespace
+std
+{
+template
+<
+class
+>
+class
+char_traits
+;
+template
+<
+class
+>
+class
+allocator
+;
+template
+<
+typename
+C
+,
+typename
+T
+=
+char_traits
+<
+C
+>
+,
+typename
+A
+=
+allocator
+<
+C
+>
+>
+class
+basic_string
+;
+typedef
+basic_string
+<
+char
+>
+string
+;
+}
+int
+me
+(
+std
+::
+string
+&
+)
+;
+#
+include
+<
+string
+>
+int
+main
+(
+int
+argc
+,
+char
+*
+*
+argv
+)
+{
+using
+namespace
+std
+;
+string
+s
+;
+me
+(
+s
+)
+;
+return
+0
+;
+}
+int
+me
+(
+std
+::
+string
+&
+s
+)
+{
+s
+=
+""
+;
+}
+
+
+==============================
+And now the estreem (event-tree stream)  ( ::: Corresponding tokens comprising the construct )
+==============================
+
+<OPEN> [NAMESPACE] "std"                         ::: namespace std {
+	<OPEN> [TEMPLATE-DECL]                       ::: template
+		<OPEN> [TEMPLATE-PARAMS]                 ::: <
+			<FULL> [CLASS] name=""               ::: class
+		<CLOSE> [TEMPLATE-PARAMS]                ::: >
+		<FULL> [CLASS] name=char_traits decl=fwd ::: class char_traits;
+	<CLOSE> [TEMPLATE]                           ::: 
+
+	<OPEN> [TEMPLATE-DECL]                       ::: template
+		<OPEN> [TEMPLATE-PARAMS]                 ::: <
+			<FULL> [CLASS] name=""               ::: class
+		<CLOSE> [TEMPLATE-PARAMS]                ::: >
+		<FULL> [CLASS] name=allocator decl=fwd   ::: class allocator;
+	<CLOSE> [TEMPLATE]                           :::
+
+	<OPEN> [TEMPLATE]                            ::: template
+		<OPEN> [TEMPLATE-PARAMS]                   ::: <
+			<FULL> [DECL] expr = { [TYPENAME] C }    ::: typename C ,
+			<FULL> [DECL] expr = { [INIT] {[TYPENAME] T} { [INSTANTIATE] char_traits C } }  ::: typename T = char_traits < C > ,
+			<FULL> [DECL] expr = { [INIT] {[TYPENAME] A} { [INSTANTIATE] allocator C } }    ::: typename A = allocator < C > 
+		<CLOSE> [PARAMS]                                                                  ::: >
+		<FULL> [CLASS] name=basic_string decl=fwd ::: class basic_string ;
+	<CLOSE> [TEMPLATE]                            :::
+	<FULL> [ALIAS] name="string" expr={ [INSTANTIATE] basic_string char } ::: typedef basic_string < char > string ;
+<CLOSE> [NAMESPACE]                             ::: }
+
+<FULL> [DECL] expr = { {[TYPE] decl={ [FUNCTION] ret="int" args = { {[REF] std::string} } } } "me" } ::: int me ( std :: string & ) ;
+
+<FULL> [PP] [INCLUDE] type=global filename="string"
+
+<OPEN> [DECL] expr = { {[TYPE] decl={ [FUNCTION] ret="int" args={ {int "argc"} {[PTR] {[PTR] char} "argv"}}}} "main"}
+	<FULL> [USING] [NAMESPACE] name="std"
+	<FULL> [DECL] expr = { {[TYPE] name="string"} "s" }
+	<FULL> [INSTR] expr = { [FCALL] "me" "s" }
+	<FULL> [RETURN] expr = 0
+<CLOSE> [DECL]
+
+<OPEN> [DECL] expr = { {[TYPE] decl={ [FUNCTION] ret="int" args = { {[REF] std::string "s"} } } } "me" }
+	<FULL> [INSTR] expr = { [ASSIGN] "s" {""} }
+<CLOSE> [DECL]
+
+
+=============================
+Definition of "class":
+
+kw("class") (cumulate)
+? identifier[extension] (cumulate) -> ext
+? attribute (cumulate) -> attr
+? identifier[new] (cumulate) -> name
+|
+ - "{" : entity stash CLASS ; emit OPEN type=class name=$name ext=$ext attr=$attr decl=def
+ - ";" : emit FULL type=class name=$name ext=$ext attr=$attr decl=fwd
+
+
+
+... (please finish)
+
+				

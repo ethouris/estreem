@@ -1,0 +1,37 @@
+
+lexeme letter_uc = 'AZ'
+lexeme letter_lc = 'az'
+lexeme letter = { letter_uc | letter_lc }
+lexeme cipher = '09'
+lexeme nameable {
+	string letter |
+	string '_'
+}
+
+# Now strings
+
+lexeme langword {
+	string nameable {nameable | cipher}...?
+}
+
+# Important changes:
+
+# 1. Operator '...' = "one or more". '...?' means "zero or more".
+# 2. No "regexp"
+# 3. Lexemes cannot refer to explicit character sets that duplicate with others without referring to lexemes.
+
+lexeme letter = { 'AZ' | 'az' }
+lexeme letter_lc = 'az'
+
+# That's incorrect. Correct definition is:
+
+lexeme letter_lc = 'az'
+lexeme letter {
+	string 'AZ' | string letter_lc
+}
+
+# (a simplification, however, can refer to existing lexeme
+# and impose a new name, so the above can be automatically turned into:
+# lexeme letter = { 'AZ' | letter_lc }
+
+
