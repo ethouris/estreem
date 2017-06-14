@@ -593,7 +593,7 @@ public:
     template <class... Args>
     void init_range( char c1, char c2, Args... args )
     {
-        for (char c = c1; c != c2; c++)
+        for (char c = c1; c <= c2; c++)
         {
             LexemeBase* xtd = globmatch[int(c)];
             if ( !xtd )

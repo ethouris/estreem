@@ -1,5 +1,5 @@
-#CXX=g++ -std=c++11
-CXX=clang++ -std=c++11 -stdlib=libstdc++
+CXX=g++ -std=c++11
+#CXX=clang++ -std=c++11 -stdlib=libstdc++
 
 #GCCFLAGS=-fno-default-inline -fno-implicit-inline-templates -fno-eliminate-unused-debug-symbols
 
