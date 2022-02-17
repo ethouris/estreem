@@ -37,9 +37,9 @@ A sequence is a series of lexemes, which can possibly be separated by whitespace
 So, let's define something that is called "system lexemes", that is, lexemes that have special meaning
 and play special role in the whole process. These are:
 
-* @whitespace: may separate lexemes as well as sub-lexemes in a sequence lexeme (defineable)
-* @any: a non-empty printable character, not being a @whitespace (predefined)
-* @empty: an empty character (predefined)
+* `@whitespace`: may separate lexemes as well as sub-lexemes in a sequence lexeme (defineable)
+* `@any`: a non-empty printable character, not being a `@whitespace` (predefined)
+* `@empty`: an empty character (predefined)
 
 Beside these, there's a special approach for a "keyword" lexeme. Because a large part of most of the
 languages are keywords, it is easier if there can be defined a fast keyword match that is being run
